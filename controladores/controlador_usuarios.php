@@ -1,0 +1,19 @@
+<?php
+include '../clases/conexion.php';
+include '../clases/usuarios.php';
+
+if (isset($_REQUEST['operacion'])) {
+    $datos_usuarios = new Usuarios();
+    $msg = "Selección no encontrada";
+    switch ($_REQUEST['operacion']) {
+        case 1:
+            $rs = $datos_usuarios->insertUsuario($_REQUEST['nombres'], 
+            $_REQUEST['apellidos'], $_REQUEST['direccion'], $_REQUEST['telefono'], $_REQUEST['depto'], $_REQUEST['municipio'], $_REQUEST['email'], $_REQUEST['usuario'], $_REQUEST['contrasena'], $_REQUEST['tipoUsuario']);
+            echo $rs;
+            break;
+        
+        default:
+            echo $msg;
+            break;
+    }
+}
