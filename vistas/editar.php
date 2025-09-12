@@ -1,25 +1,30 @@
 <?php
+// Incluimos las clases necesarias.
 include '../clases/conexion.php';
 include '../clases/usuarios.php';
 include '../clases/helper.php';
 
-$data = new Helper();
+// Creamos los objetos necesarios.
+$data_helper = new Helper();
 $usuario_obj = new Usuarios();
-$usuario_data;
-/*
-// Verificamos que se haya pasado un ID en la URL
+$usuario_data = null; // Inicializamos la variable para evitar errores.
+
+// --- LÓGICA PARA CARGAR LOS DATOS DEL USUARIO ---
+// 1. Verificamos que se haya pasado un ID numérico en la URL (ej: editar.php?id=5).
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_usuario_editar = $_GET['id'];
-    // Obtenemos los datos del usuario usando el método modificado
+
+    // 2. Obtenemos los datos del usuario usando el método seguro y corregido.
     $usuario_data = $usuario_obj->select_usuario($id_usuario_editar);
 
-    // Si no encontramos al usuario, detenemos la ejecución
+    // 3. Si el método no devuelve un usuario (porque el ID no existe), detenemos y mostramos un error.
     if (!$usuario_data) {
-        die("Error: Usuario no encontrado.");
+        die("Error: Usuario no encontrado o no válido.");
     }
 } else {
-    die("Error: ID de usuario no válido o no proporcionado.");
-}*/
+    // Si no se proporciona un ID, no podemos editar.
+    die("Error: Se requiere un ID de usuario para la edición.");
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,39 +33,41 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
-
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="card shadow-lg rounded-3">
             <div class="card-header bg-success text-white text-center">
-                <!-- Título cambiado -->
                 <h4 class="mb-0">Edición de Usuario</h4>
             </div>
-            <div class="card-body">
-                <!-- El ID del formulario se mantiene para reutilizar el JS -->
+            <div class="card-body p-4">
                 <form name="frm2" method="post" id="frm2">
-                    
-                    <!-- Campo oculto para enviar el ID del usuario que se está editando -->
-                    <input type="hidden" id="id_usuario" value="<?php echo json_decode($usuario_data['id_usuario']); ?>">
-                    
+
+                    <!-- Campo oculto con el ID del usuario que se está editando. Es crucial para la consulta UPDATE. -->
+                    <input type="hidden" id="id_usuario"
+                        value="<?php echo htmlspecialchars($usuario_data['id_usuario']); ?>">
+
+                    <!-- Rellenamos los campos de texto con los datos obtenidos de la base de datos -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="nombres" class="form-label">Nombres</label>
-                            <!-- Usamos 'value' para rellenar el campo con los datos del usuario -->
-                            <input type="text" class="form-control" id="nombres" value="<?php json_decode($usuario_data['nombres'])?>" required>
+                            <input type="text" class="form-control" id="nombres"
+                                value="<?php echo htmlspecialchars($usuario_data['nombres']); ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="apellidos" class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" id="apellidos" value="<?php echo json_decode($usuario_data['apellidos']); ?>" required>
+                            <input type="text" class="form-control" id="apellidos"
+                                value="<?php echo htmlspecialchars($usuario_data['apellidos']); ?>" required>
                         </div>
                     </div>
 
+                    <!-- Más campos de texto rellenados -->
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" value="<?php echo json_decode($usuario_data['direccion']); ?>" required>
+                        <input type="text" class="form-control" id="direccion"
+                            value="<?php echo htmlspecialchars($usuario_data['direccion']); ?>" required>
                     </div>
 
                     <div class="row mb-3">
@@ -68,45 +75,51 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <label for="departamento" class="form-label">Departamento</label>
                             <select class="form-select" id="departamento" required>
                                 <option disabled value="">Seleccione un departamento</option>
-                                <?php echo $data->vistaDepartamentos(); ?>
+                                <?php echo $data_helper->vistaDepartamentos(); /* PHP carga la lista de todos los deptos */ ?>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="municipio" class="form-label">Municipio</label>
                             <select class="form-select" id="municipio" required>
-                                <!-- Los municipios se cargarán con AJAX -->
+                                <option disabled value="">Seleccione un departamento primero</option>
+                                <!-- Este select se llenará dinámicamente con JavaScript/AJAX -->
                             </select>
                         </div>
                     </div>
 
+                    <!-- ... resto de campos (teléfono, email, usuario) ... -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control" id="telefono" value="<?php echo json_decode($usuario_data['telefono']); ?>" pattern="[0-9]{4}-[0-9]{4}" required>
+                            <input type="tel" class="form-control" id="telefono"
+                                value="<?php echo htmlspecialchars($usuario_data['telefono']); ?>"
+                                pattern="[0-9]{4}-[0-9]{4}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($usuario_data['email']); ?>" required>
+                            <input type="email" class="form-control" id="email"
+                                value="<?php echo htmlspecialchars($usuario_data['email']); ?>" required>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="usuario" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" id="usuario" value="<?php echo htmlspecialchars($usuario_data['usuario']); ?>" minlength="4" required>
+                            <input type="text" class="form-control" id="usuario"
+                                value="<?php echo htmlspecialchars($usuario_data['usuario']); ?>" minlength="4"
+                                required>
                         </div>
                         <div class="col-md-6">
-                            <label for="contrasena" class="form-label">Contraseña</label>
-                            <!-- La contraseña no se precarga por seguridad -->
-                            <input type="password" class="form-control" id="contrasena" placeholder="Dejar en blanco para no cambiar" minlength="6">
-                            <div class="form-text">Si no desea cambiar la contraseña, deje este campo vacío.</div>
+                            <label for="contrasena" class="form-label">Nueva Contraseña</label>
+                            <input type="password" class="form-control" id="contrasena"
+                                placeholder="Dejar en blanco para no cambiar" minlength="6">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
                         <select class="form-select" id="tipoUsuario" required>
-                            <option disabled value="">Seleccione un tipo de usuario</option>
+                            <option disabled value="">Seleccione un tipo</option>
                             <option value="1">Administrador</option>
                             <option value="2">Recepcionista</option>
                         </select>
@@ -121,26 +134,21 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         </div>
     </div>
 
+    <!-- Librería jQuery (necesaria para AJAX) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    <!-- =================================================================== -->
+    <!--          PUENTE DE DATOS: PASANDO VALORES DE PHP A JAVASCRIPT         -->
+    <!-- =================================================================== -->
     <script>
-        // Script para activar validaciones de Bootstrap
-        (function() {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        // Aquí PHP "imprime" los IDs del usuario actual como variables de JavaScript.
+        // json_encode() convierte los valores de PHP a un formato que JavaScript entiende de forma segura.
+        const deptoUsuario = <?php echo json_encode($usuario_data['departamento_id']); ?>;
+        const municipioUsuario = <?php echo json_encode($usuario_data['municipio_id']); ?>;
+        const tipoUsuario = <?php echo json_encode($usuario_data['tipousuario_id']); ?>;
     </script>
-    <!-- Incluimos un nuevo archivo JS para la lógica de edición -->
+
+    <!-- Nuestro script personalizado que usará las variables de arriba -->
     <script type="text/javascript" src="../js/edicion.js"></script>
 </body>
 
