@@ -35,4 +35,4 @@ $("#frm1").on("submit", function (e) {
     }).done(function (respuesta) {
         
     }); 
-})
+});

@@ -7,11 +7,37 @@ if (isset($_REQUEST['operacion'])) {
     $msg = "Selección no encontrada";
     switch ($_REQUEST['operacion']) {
         case 1:
-            $rs = $datos_usuarios->insertUsuario($_REQUEST['nombres'], 
-            $_REQUEST['apellidos'], $_REQUEST['direccion'], $_REQUEST['telefono'], $_REQUEST['depto'], $_REQUEST['municipio'], $_REQUEST['email'], $_REQUEST['usuario'], $_REQUEST['contrasena'], $_REQUEST['tipoUsuario']);
+            $rs = $datos_usuarios->insertUsuario(
+                $_REQUEST['nombres'],
+                $_REQUEST['apellidos'],
+                $_REQUEST['direccion'],
+                $_REQUEST['telefono'],
+                $_REQUEST['depto'],
+                $_REQUEST['municipio'],
+                $_REQUEST['email'],
+                $_REQUEST['usuario'],
+                $_REQUEST['contrasena'],
+                $_REQUEST['tipoUsuario']
+            );
             echo $rs;
             break;
-        
+        case 2:
+            $rs = $datos_usuarios->updateUsuario(
+                $_REQUEST['id_usuario'],
+                $_REQUEST['nombres'],
+                $_REQUEST['apellidos'],
+                $_REQUEST['direccion'],
+                $_REQUEST['telefono'],
+                $_REQUEST['depto'],
+                $_REQUEST['municipio'],
+                $_REQUEST['email'],
+                $_REQUEST['usuario'],
+                $_REQUEST['contrasena'],
+                $_REQUEST['tipoUsuario']
+            );
+            echo $rs;
+            break;
+
         default:
             echo $msg;
             break;
