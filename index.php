@@ -63,7 +63,7 @@ $lista_usuarios = $usuario_obj->usuarios();
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
                                             <!-- Botón de eliminar (funcionalidad a futuro) -->
-                                            <a href="#" class="btn btn-sm btn-danger" title="Eliminar">
+                                            <a href="clases/helper.php" class="btn btn-sm btn-danger" title="Eliminar">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
                                         </td>

@@ -8,8 +8,8 @@ $data_helper = new Helper();
 $usuario_obj = new Usuarios();
 $usuario_data;
 
-if (isset($_GET['id_usuario']) && is_numeric($_GET['id_usuario'])) {
-    $id_usuario_editar = $_GET['id_usuario'];
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_usuario_editar = $_GET['id'];
     $usuario_data = $usuario_obj->select_usuario($id_usuario_editar);
     
     if (!$usuario_data) {
@@ -42,19 +42,19 @@ if (isset($_GET['id_usuario']) && is_numeric($_GET['id_usuario'])) {
                         <div class="col-md-6">
                             <label for="nombres" class="form-label">Nombres</label>
                             <input type="text" class="form-control" id="nombres" 
-                                   value="<?php echo htmlspecialchars($usuario_data['nombres']); ?>" required>
+                                   value="<?php echo mb_convert_encoding($usuario_data['nombres'], 'UTF-8', 'ISO-8859-1');; ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="apellidos" class="form-label">Apellidos</label>
                             <input type="text" class="form-control" id="apellidos" 
-                                   value="<?php echo htmlspecialchars($usuario_data['apellidos']); ?>" required>
+                                   value="<?php echo mb_convert_encoding($usuario_data['apellidos'], 'UTF-8', 'ISO-8859-1');; ?>" required>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="direccion" class="form-label">Dirección</label>
                         <input type="text" class="form-control" id="direccion" 
-                               value="<?php echo htmlspecialchars($usuario_data['direccion']); ?>" required>
+                               value="<?php echo mb_convert_encoding($usuario_data['direccion'], 'UTF-8', 'ISO-8859-1');; ?>" required>
                     </div>
 
                     <div class="row mb-3">

@@ -85,8 +85,9 @@ class Helper extends Conexion
         return $html;
     }
 
-
-
+    public function deleteUsuario($id_usuario){
+        
+    }
     
 }
 
