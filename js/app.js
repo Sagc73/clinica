@@ -33,6 +33,11 @@ $("#frm1").on("submit", function (e) {
         dataType: 'html',
         data: { operacion: 1, nombres, apellidos, direccion, telefono, email, depto, municipio, usuario, contrasena, tipoUsuario },
     }).done(function (respuesta) {
-        
+        if(respuesta.trim() === "1"){
+            alert("Usuario registrado con éxito.");
+            window.location.href = "../index.php";
+        }else{
+            alert("Error al registrar el usuario."+respuesta);
+        }
     }); 
 });

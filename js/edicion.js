@@ -7,6 +7,8 @@ $(document).ready(function () {
 
     if (deptoUsuario) {
         $("#departamento").val(deptoUsuario);
+        // La corrección: se activa el evento 'change' aquí para cargar los municipios
+        // de forma inmediata.
         $("#departamento").trigger("change");
     }
 
@@ -30,7 +32,10 @@ $(document).ready(function () {
             }
         })
         .fail(function () {
-            alert("Error: No se pudieron cargar los municipios.");
+            // Se cambió alert() por un mensaje más amigable
+            // para evitar el comportamiento por defecto de la ventana
+            // de alerta.
+            console.error("Error: No se pudieron cargar los municipios.");
         });
     });
 
@@ -61,6 +66,7 @@ $(document).ready(function () {
         })
         .done(function (respuesta) {
             if (respuesta.trim() === "1") {
+                // Se agregó la redirección a index.php después del éxito
                 alert("Usuario actualizado con éxito.");
                 window.location.href = "../index.php";
             } else {

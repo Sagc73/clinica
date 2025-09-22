@@ -69,6 +69,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <label for="municipio" class="form-label">Municipio</label>
                             <select class="form-select" id="municipio" required>
                                 <option disabled value="">Seleccione un departamento primero</option>
+                                <?php echo $data_helper->vistaMunicipios(); ?>
                             </select>
                         </div>
                     </div>

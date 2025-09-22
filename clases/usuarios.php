@@ -53,7 +53,6 @@ class Usuarios extends Conexion
         $contrasena, 
         $tipousuario){
         try {
-            // 1. Creamos un array asociativo con todos los parámetros.
             // Esto hace el código más legible que usar bindValue() múltiples veces.
             $params = [
                 ':nombres' => mb_convert_encoding($nombres, 'UTF-8', 'ISO-8859-1'),
